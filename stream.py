@@ -27,4 +27,3 @@ while True:
 
 sleep(0.1)
 t.release()
-cv2.destroyAllWindows()
