@@ -6,7 +6,7 @@ aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 aruco_params = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
 
-t = cv2.VideoCapture(0)
+t = cv2.VideoCapture("/dev/video1")
 while True:
     ret, frame = t.read()
 
