@@ -10,6 +10,26 @@ class commands(Enum):
 
 
 markers_id = [1, 2, 3]
+
+
+def send_command(command):
+    packet = bytes([ST, command])  # START  # example CRC
+
+    ser.write(packet)
+
+
+def process_id(id):
+    match id:
+        case 1:
+            print("MOVE")
+            send_command(MOVE)
+
+
+def detect_object(id):
+    if id in markers_id:
+        send_command()
+
+
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 aruco_params = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
@@ -30,21 +50,3 @@ while True:
 
 
 t.release()
-
-
-def send_command(command):
-    packet = bytes([ST, command])  # START  # example CRC
-
-    ser.write(packet)
-
-
-def process_id(id):
-    match id:
-        case 1:
-            print("MOVE")
-            send_command(MOVE)
-
-
-def detect_object(id):
-    if id in markers_id:
-        send_command()
