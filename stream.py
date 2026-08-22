@@ -1,12 +1,20 @@
+import serial
 import cv2
 import numpy as np
 from time import sleep
+from enum import Enum
 
+
+class commands(Enum):
+    MOVE = 0x1
+
+
+markers_id = [1, 2, 3]
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 aruco_params = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
-
-t = cv2.VideoCapture(0)
+# detection
+t = cv2.VideoCapture("/dev/video1/")
 while True:
     ret, frame = t.read()
 
@@ -15,12 +23,28 @@ while True:
 
         corners, ids, rejected = detector.detectMarkers(gray)
         if ids is not None:
-            print(ids)
+            process_id(ids)
     else:
         print("Error")
         break
 
-    if cv2.waitKey(25) == ord("q"):
-        break
 
 t.release()
+
+
+def send_command(command):
+    packet = bytes([ST, command])  # START  # example CRC
+
+    ser.write(packet)
+
+
+def process_id(id):
+    match id:
+        case 1:
+            print("MOVE")
+            send_command(MOVE)
+
+
+def detect_object(id):
+    if id in markers_id:
+        send_command()
