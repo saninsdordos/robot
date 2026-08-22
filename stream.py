@@ -3,9 +3,10 @@ import cv2
 import numpy as np
 from time import sleep
 from enum import Enum
+from enum import IntEnum
 
 
-class commands(Enum):
+class commands(IntEnum):
     MOVE = 0x1
 
 
@@ -22,12 +23,7 @@ def process_id(id):
     match id:
         case 1:
             print("MOVE")
-            send_command(MOVE)
-
-
-def detect_object(id):
-    if id in markers_id:
-        send_command()
+            send_command(commands.MOVE)
 
 
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
