@@ -17,17 +17,17 @@ class commands(IntEnum):
 markers_id = [1, 2, 3]
 
 
-def send_command(command):
+def send_command(command, serial):
     packet = bytes([90, command])  # START  # example CRC
 
-    ser.write(packet)
+    serial.write(packet)
 
 
-def process_id(id):
+def process_id(id, ser):
     match id:
         case 1:
             print("MOVE")
-            send_command(commands.MOVE)
+            send_command(commands.MOVE, ser)
 
 
 def open_serial():
@@ -50,13 +50,14 @@ def open_serial():
         rtscts=False,
         dsrdtr=False,
     )
-
+    return ser
 
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 aruco_params = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
 # detection
-t = cv2.VideoCapture("/dev/video1/")
+temp = open_serial()
+t = cv2.VideoCapture("/dev/video1")
 while True:
     ret, frame = t.read()
 
@@ -65,7 +66,7 @@ while True:
 
         corners, ids, rejected = detector.detectMarkers(gray)
         if ids is not None:
-            process_id(ids)
+            process_id(ids, temp)
     else:
         print("Error")
         break
