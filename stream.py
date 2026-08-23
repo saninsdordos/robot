@@ -32,7 +32,6 @@ def process_id(id, ser):
 
 def open_serial():
 
-    print(f"Opening UART5: {port}")
 
     ser = serial.Serial(
         port=UART_PORT,
