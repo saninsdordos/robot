@@ -1,0 +1,36 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Universal remote web interface{% endblock %}
+
+{% block scripts %}
+{{super()}}
+
+<script src="/static/dot.js"></script>
+
+<script>
+
+{%raw%}
+    remote_template = doT.template('<div id={{=it.id}} class="col-md-5"><h1>{{=it.id}}</h1></div>');
+    btn_template = doT.template("<button data-boton='{{=it.button}}' data-mando='{{=it.remote}}' class='btn btn-large btn-success boton'>{{=it.button}}</button>");
+{%endraw%}
+
+    jQuery(document).ready(function(){
+        allbtns = {{buttons|safe}};
+        window.all = allbtns;
+        $.each(allbtns, function(remote, allbtns_){
+            $('#remotes').append(remote_template({'id': remote}));
+            $(allbtns_).each(function(i, button){
+                $('#' + remote).append(btn_template({"remote": remote, "button": button}));
+            });
+        });
+        $('.boton').on('click', function(){
+            $.getJSON('/' + $(this).attr('data-mando') + "/" + $(this).attr('data-boton'));
+        });
+    });
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+    <div id="remotes"></div>
+{% endblock %}
