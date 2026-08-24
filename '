@@ -1,0 +1,14 @@
+from machine import UART
+
+received_message = []
+uart0 = UART(1, baudrate=115200, tx=8, rx=3)
+while True:
+    if uart0.any():
+        message_byte = uart0.read(1)
+    if message_byte == "*":
+        continue
+    if message_byte == "b!":
+        break
+
+    received_message += message_byte
+    print(received_message)
